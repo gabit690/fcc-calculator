@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
-// import './CalculatorPad.css';
+import './CalculatorPad.css';
 
 import Button from "../Button/Button";
 
@@ -88,8 +88,10 @@ const CalculatorPad = (props) => {
   console.log(buttons);
 
   return (
-    <div id="pad-container" className="container-fluid">
+    <div className="container-fluid mt-3">
+      <div id="pad-container" className="border">
         {buttons}
+      </div>
     </div>
   );
 };

@@ -19,7 +19,8 @@ class Calculator extends Component {
 
   render() {
     return (
-      <div id="calculator-container" className="container-fluid">
+      <div id="calculator-container" className="container-fluid py-3">
+        <p id="marca" className="text-center mb-2 text-secondary">FreeCodeCamp</p>
         <CalculatorScreen 
           result={this.state.resultExpression}
           input={this.state.currentIntput}

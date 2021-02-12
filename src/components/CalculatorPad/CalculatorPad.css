@@ -4,5 +4,7 @@
 }
 
 #pad-container > :first-child {
-  grid-column: 3 / 4;
+  grid-column: 3/4;
 }
+
+/*# sourceMappingURL=CalculatorPad.css.map */
