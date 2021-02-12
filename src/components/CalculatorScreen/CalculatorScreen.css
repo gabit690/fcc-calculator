@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&display=swap");
+#display-container {
+  background: #ffffed;
+  box-shadow: inset 20px 20px 60px #d9d9c9, inset -20px -20px 60px #ffffff;
+}
+
+.displayOff {
+  background: #ffffed80 !important;
+}
+
+#result, #input {
+  font-family: "Inconsolata", "Courier New", Courier, monospace;
+  word-wrap: break-word;
+}
+
+#result {
+  font-size: 20px;
+  color: royalblue;
+}
+
+#input {
+  font-size: 30px;
+}
+
+/*# sourceMappingURL=CalculatorScreen.css.map */

@@ -12,8 +12,8 @@ class Calculator extends Component {
     super();
     this.state = {
       on: true,
-      resultExpression: "resultado",
-      currentIntput: "inputs"
+      resultExpression: "67 + 4567 = 01",
+      currentIntput: "+"
     };
   }
 
