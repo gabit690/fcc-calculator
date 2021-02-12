@@ -3,7 +3,7 @@
 Implementación de una calculadora con operaciones básicas.  
 Proyecto para el curso "Front End Development Libraries" en [Freecodecamp][FCC].
 
-## **Frameworks y Librerías**
+## **Frameworks y Librerías.**
 
 - React
 - Bootstrap

@@ -1,10 +1,13 @@
-
 import './App.css';
+
+import Calculator from './components/Calculator/Calculator';
+import Contact from './components/Contact/Contact';
 
 function App() {
   return (
     <div className="App">
-
+      <Calculator />
+      <Contact />
     </div>
   );
 }
