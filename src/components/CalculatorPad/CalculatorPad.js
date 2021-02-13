@@ -9,87 +9,112 @@ const CalculatorPad = (props) => {
   const buttonsInfo = [
     {
       id: "clear",
-      value: "C"
+      value: "AC",
+      type: "btn-clear"
     },
     {
       id: "power",
-      value: "P"
+      value: "P",
+      type: "btn-power"
     },
     {
       id: "seven",
-      value: "7"
+      value: "7",
+      type: "btn-number"
     },
     {
       id: "eight",
-      value: "8"
+      value: "8",
+      type: "btn-number"
     },
     {
       id: "nine",
-      value: "9"
+      value: "9",
+      type: "btn-number"
     },
     {
       id: "divide",
-      value: "/"
+      value: "/",
+      type: "btn-operator"
     },
     {
       id: "four",
-      value: "4"
+      value: "4",
+      type: "btn-number"
     },
     {
       id: "five",
-      value: "5"
+      value: "5",
+      type: "btn-number"
     },
     {
       id: "six",
-      value: "6"
+      value: "6",
+      type: "btn-number"
     },
     {
       id: "multiply",
-      value: "*"
+      value: "X",
+      type: "btn-operator"
     },
     {
       id: "one",
-      value: "1"
+      value: "1",
+      type: "btn-number"
     },
     {
       id: "two",
-      value: "2"
+      value: "2",
+      type: "btn-number"
     },
     {
       id: "three",
-      value: "3"
+      value: "3",
+      type: "btn-number"
     },
     {
       id: "subtract",
-      value: "-"
+      value: "-",
+      type: "btn-operator"
     },
     {
       id: "zero",
-      value: "0"
+      value: "0",
+      type: "btn-number"
     },
     {
       id: "decimal",
-      value: "."
+      value: ".",
+      type: "btn-operator"
     },
     {
       id: "equal",
-      value: "="
+      value: "=",
+      type: "btn-operator"
     },
     {
       id: "add",
-      value: "+"
+      value: "+",
+      type: "btn-operator"
     }
   ];
 
   const buttons = buttonsInfo.map((button, index) => {
-    return (<Button id={button.id} key={index} value={button.value}/>);
+    return (
+      <Button 
+        id={button.id} 
+        key={index} 
+        value={button.value} 
+        type={button.type}
+      />
+    );
   });
 
   console.log(buttons);
 
   return (
     <div className="container-fluid mt-3">
-      <div id="pad-container" className="border">
+      <div id="pad-container" className="">
         {buttons}
       </div>
     </div>

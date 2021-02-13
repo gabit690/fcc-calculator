@@ -1,16 +1,22 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
-// import './Button.css';
+import './Button.css';
 
 const Button = (props) => {
 
-  const {id, value} = props;
+  let {id, value, type} = props;
 
   return (
-    <div className="container-fluid">
-      <button id={id}>{value}</button>
+    <div className="container-fluid d-flex p-0">
+      <button 
+        id={id} 
+        className={"w-100 fs-2 " + type}
+      >
+        {value}
+      </button>
     </div>
   );
+  
 };
 
 export default Button;

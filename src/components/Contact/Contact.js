@@ -7,7 +7,7 @@ import './Contact.css'
 const Contact = () => {
   return (
     <div className="container-fluid">
-      <p id="author" className="text-center text-light mx-auto mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">By Gabit</p>
+      <p id="author" className="text-center text-light mx-auto mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">By Gabit</p>
       <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
