@@ -9,7 +9,7 @@ const CalculatorPad = (props) => {
   const buttonsInfo = [
     {
       id: "clear",
-      value: "AC",
+      value: "C",
       type: "btn-clear"
     },
     {
@@ -88,7 +88,7 @@ const CalculatorPad = (props) => {
       type: "btn-operator"
     },
     {
-      id: "equal",
+      id: "equals",
       value: "=",
       type: "btn-operator"
     },
@@ -106,11 +106,11 @@ const CalculatorPad = (props) => {
         key={index} 
         value={button.value} 
         type={button.type}
+        action={props.action}
+        active={(button.id !== "power") ? props.turnOn : true}
       />
     );
   });
-
-  console.log(buttons);
 
   return (
     <div className="container-fluid mt-3">

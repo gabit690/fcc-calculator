@@ -8,16 +8,18 @@
   background: #ffffed80 !important;
 }
 
-#result, #input {
+#result, #display {
   font-family: "Inconsolata", "Courier New", Courier, monospace;
   word-wrap: break-word;
 }
 
 #result {
+  height: 25px;
   font-size: 20px;
 }
 
-#input {
+#display {
+  height: 40px;
   font-size: 30px;
 }
 

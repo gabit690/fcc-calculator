@@ -11,6 +11,8 @@ const Button = (props) => {
       <button 
         id={id} 
         className={"w-100 fs-2 " + type}
+        onClick={props.action}
+        disabled={!props.active}
       >
         {value}
       </button>
