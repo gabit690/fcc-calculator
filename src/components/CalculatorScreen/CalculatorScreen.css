@@ -14,7 +14,7 @@
 }
 
 #result {
-  height: 25px;
+  min-height: 30px;
   font-size: 20px;
 }
 
