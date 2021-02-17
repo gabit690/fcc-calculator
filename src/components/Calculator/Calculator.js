@@ -127,7 +127,7 @@ class Calculator extends Component {
 
         this.props.changeScreenValues(this.props.resultExpression + "0.", this.props.currentInput + "0.");
 
-      } else if (!/\./.test(this.props.currentInput)) {
+      } else if (!/\.|^\-$/.test(this.props.currentInput)) {
 
         this.props.changeScreenValues(this.props.resultExpression + ".", this.props.currentInput + ".");
 
@@ -137,10 +137,12 @@ class Calculator extends Component {
   }
 
   makeOperation(pressedOperator) {
-    if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.props.resultExpression)) {
+    
+    if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.props.resultExpression) &&
+    !/zero/.test(this.props.currentInput)) {
 
       const operand1 = Number(this.props.resultExpression.match(/^(\-)?\d+(\.\d+)?/)[0]);
-      const expressionOperator = this.props.resultExpression.match(/ [\/x\-\+] /)[0].trim();;
+      const expressionOperator = this.props.resultExpression.match(/ [\/x\-\+] /)[0].trim();
       const operand2 = Number(this.props.resultExpression.match(/(\-)?\d+(\.\d+)?$/)[0]);
       let newResultExpression = "";
       let newCurrentInput = "";
@@ -152,7 +154,7 @@ class Calculator extends Component {
         switch (expressionOperator) {
           case "/":
             resultOperation = (operand2 == 0) ? 
-                                "Division by zero"
+                                "DIV by zero"
                                 : 
                                 ((operand1 / operand2).getPrecision() > 4) ? 
                                   ((operand1 / operand2).toFixed(4)).toString() 
@@ -179,36 +181,57 @@ class Calculator extends Component {
             break;
         }
 
-        newResultExpression = this.props.resultExpression + " = " + resultOperation;
+        newResultExpression = (/zero/.test(resultOperation)) ? 
+                                this.props.resultExpression : 
+                                (this.props.resultExpression + " = " + resultOperation);
         newCurrentInput = resultOperation;
 
       } else {
-
         newCurrentInput = pressedOperator;
 
         switch (expressionOperator) {
           case "/":
-            newResultExpression = (operand2 == 0) ? "" : (operand1 / operand2).toString() + " " + pressedOperator.toLowerCase() + " ";
+            newResultExpression = (operand2 == 0) ? 
+                                  ""
+                                  : 
+                                  ((operand1 / operand2).getPrecision() > 4) ? 
+                                    ((operand1 / operand2).toFixed(4)).toString() 
+                                    : 
+                                    (operand1 / operand2).toString();
             break;
           case "x":
-            newResultExpression = (operand1 * operand2).toString() + " " + pressedOperator.toLowerCase() + " ";
+            newResultExpression = ((operand1 * operand2).getPrecision() > 4) ? 
+                                    ((operand1 * operand2).toFixed(4)).toString() 
+                                    : 
+                                    (operand1 * operand2).toString();
             break;
           case "-":
-            newResultExpression = (operand1 - operand2).toString() + " " + pressedOperator.toLowerCase() + " ";
+            newResultExpression = ((operand1 - operand2).getPrecision() > 4) ? 
+                                    ((operand1 - operand2).toFixed(4)).toString() 
+                                    : 
+                                    (operand1 - operand2).toString();
             break;
           case "+":
-            newResultExpression = (operand1 + operand2).toString() + " " + pressedOperator.toLowerCase() + " ";
+            newResultExpression = ((operand1 + operand2).getPrecision() > 4) ? 
+                                    ((operand1 + operand2).toFixed(4)).toString() 
+                                    : 
+                                    (operand1 + operand2).toString();
             break;
         }
-      }
 
+      }
+      
       if (newResultExpression != "") {
+
+        if (!/=/.test(newResultExpression)) {
+          newResultExpression += (" " + pressedOperator.toLowerCase() + " ");
+        }
 
         this.props.changeScreenValues(newResultExpression, (Number(newCurrentInput).getPrecision() > 4) ? Number(newCurrentInput).toFixed(4).toString() : newCurrentInput);
 
       } else {
 
-        this.props.changeScreenValues(this.props.resultExpression, "division by zero");
+        this.props.changeScreenValues(this.props.resultExpression, "DIV by zero");
 
       }
 
@@ -217,9 +240,13 @@ class Calculator extends Component {
 
   enterArithmeticOperator(operator) {
 
-    if (/\-/.test(operator) && (/zero/.test(this.props.currentIntput) || this.props.resultExpression == "")) {
+    if (/\-/.test(operator) && (/zero/.test(this.props.currentInput) || this.props.resultExpression == "")) {
 
-      this.props.changeScreenValues("-0", "-0");
+      if (this.props.resultExpression == "" || /zero/.test(this.props.currentInput)) {
+        this.props.changeScreenValues("-", "-");
+      } else {
+        this.props.changeScreenValues("-0", "-0");
+      }
 
     } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.props.resultExpression) && /\-/.test(operator)) {
 
