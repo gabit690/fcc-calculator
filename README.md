@@ -20,8 +20,8 @@ Podés ver el trabajo terminado [acá][web].
 
 **Fecha de inicio:** 10/02/2021  
 
-**Fecha de finalización:** ??/02/2021
+**Fecha de finalización:** 17/02/2021
 
 [FCC]: https://www.freecodecamp.org/
 
-[web]: ???????????????
+[web]: https://gabit-javascript-calculator.netlify.app/
