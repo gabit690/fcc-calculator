@@ -6,6 +6,10 @@ import './Calculator.css';
 import CalculatorScreen from '../CalculatorScreen/CalculatorScreen';
 import CalculatorPad from '../CalculatorPad/CalculatorPad';
 
+import { connect } from 'react-redux'
+import { mapStateToProps, mapDispatchToProps } from "../../CalculatorRedux.js";
+
+
 Number.prototype.getPrecision = function() {
   var s = this + "",
       d = s.indexOf('.') + 1;
@@ -15,13 +19,8 @@ Number.prototype.getPrecision = function() {
 
 class Calculator extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      on: true,
-      resultExpression: "",
-      currentIntput: "0"
-    };
+  constructor(props) {
+    super(props);
     this.handlePressedKey = this.handlePressedKey.bind(this);
   }
 
@@ -31,10 +30,10 @@ class Calculator extends Component {
 
     switch (buttonKey) {
       case "C":
-        this.cleanScreen();
+        this.props.clearScreen();
         break;
       case "P":
-        this.switchPower();
+        this.props.switchPower(this.props.on);
         break;
       case "=":
         this.makeOperation("=");
@@ -44,18 +43,6 @@ class Calculator extends Component {
         break;
     }
 
-  }
-
-  switchPower() {
-    if (this.state.on) {
-      this.setState({on: false, resultExpression: "", currentIntput: ""});
-    } else {
-      this.setState({on: true, currentIntput: "0"});
-    }
-  }
-
-  cleanScreen() {
-    this.setState({resultExpression: "", currentIntput: "0"});
   }
 
   enterKey(key) {
@@ -82,38 +69,31 @@ class Calculator extends Component {
           break;
       }
 
-
   }
 
   inputNumber(number) {
 
-    if (this.state.currentIntput.length <= 15) {
-      if (/=|^\-?0$/.test(this.state.resultExpression) || 
-          this.state.resultExpression == "" || 
-          /zero/.test(this.state.currentIntput)) {
-        this.setState({
-          resultExpression: number, 
-          currentIntput: number
-        });
-      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.state.resultExpression)) {
-        this.setState({
-          resultExpression: this.state.resultExpression + number, 
-          currentIntput: number
-        });
-      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?0$/.test(this.state.resultExpression)) {
-        this.setState({
-          resultExpression: this.state.resultExpression.replace(/(\-)?.$/, number), 
-          currentIntput: number
-        });
-      } else if (/^\-|\.|^[1-9]+/.test(this.state.currentIntput)) {
-        this.setState({
-          resultExpression: this.state.resultExpression + number, 
-          currentIntput: this.state.currentIntput + number
-        });
+    if (this.props.currentInput.length <= 15) {
+      if (/=|^\-?0$/.test(this.props.resultExpression) || 
+          this.props.resultExpression == "" || 
+          /zero/.test(this.props.currentInput)) {
+
+        this.props.changeScreenValues(number, number);
+
+      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.props.resultExpression)) {
+
+        this.props.changeScreenValues(this.props.resultExpression + number, number);
+
+      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?0$/.test(this.props.resultExpression)) {
+
+        this.props.changeScreenValues(this.props.resultExpression.replace(/(\-)?.$/, number), number);
+
+      } else if (/^\-|\.|^[1-9]+/.test(this.props.currentInput)) {
+
+        this.props.changeScreenValues(this.props.resultExpression + number, this.props.currentInput + number);
+
       }
     }
-
-
 
   }
 
@@ -132,41 +112,36 @@ class Calculator extends Component {
 
   enterDecimal() {
 
-    if (this.state.currentIntput.length <= 14) {
-      if (/=/.test(this.state.resultExpression) || 
-          this.state.resultExpression == "" || 
-          /zero/.test(this.state.currentIntput)) {
-        this.setState({
-          resultExpression: "0.", 
-          currentIntput: "0."
-        });
-      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.state.resultExpression)) {
-        this.setState({
-          resultExpression: this.state.resultExpression + "0.", 
-          currentIntput: "0."
-        });
-      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-$/.test(this.state.resultExpression)) {
-        this.setState({
-          resultExpression: this.state.resultExpression + "0.", 
-          currentIntput: this.state.currentIntput + "0."
-        });
-      } else if (!/\./.test(this.state.currentIntput)) {
-        this.setState({
-          resultExpression: this.state.resultExpression + ".", 
-          currentIntput: this.state.currentIntput + "."
-        });
+    if (this.props.currentInput.length <= 14) {
+      if (/=/.test(this.props.resultExpression) || 
+          this.props.resultExpression == "" || 
+          /zero/.test(this.props.currentInput)) {
+
+        this.props.changeScreenValues("0.", "0.");
+
+      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.props.resultExpression)) {
+
+        this.props.changeScreenValues(this.props.resultExpression + "0.", "0.");
+
+      } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-$/.test(this.props.resultExpression)) {
+
+        this.props.changeScreenValues(this.props.resultExpression + "0.", this.props.currentInput + "0.");
+
+      } else if (!/\./.test(this.props.currentInput)) {
+
+        this.props.changeScreenValues(this.props.resultExpression + ".", this.props.currentInput + ".");
+
       }
     }
-
 
   }
 
   makeOperation(pressedOperator) {
-    if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.state.resultExpression)) {
+    if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.props.resultExpression)) {
 
-      const operand1 = Number(this.state.resultExpression.match(/^(\-)?\d+(\.\d+)?/)[0]);
-      const expressionOperator = this.state.resultExpression.match(/ [\/x\-\+] /)[0].trim();;
-      const operand2 = Number(this.state.resultExpression.match(/(\-)?\d+(\.\d+)?$/)[0]);
+      const operand1 = Number(this.props.resultExpression.match(/^(\-)?\d+(\.\d+)?/)[0]);
+      const expressionOperator = this.props.resultExpression.match(/ [\/x\-\+] /)[0].trim();;
+      const operand2 = Number(this.props.resultExpression.match(/(\-)?\d+(\.\d+)?$/)[0]);
       let newResultExpression = "";
       let newCurrentInput = "";
       
@@ -180,31 +155,31 @@ class Calculator extends Component {
                                 "Division by zero"
                                 : 
                                 ((operand1 / operand2).getPrecision() > 4) ? 
-                                  (operand1 / operand2).toFixed(4).toString() 
+                                  ((operand1 / operand2).toFixed(4)).toString() 
                                   : 
                                   (operand1 / operand2).toString();
             break;
           case "x":
             resultOperation = ((operand1 * operand2).getPrecision() > 4) ? 
-                                (operand1 * operand2).toFixed(4).toString() 
+                                ((operand1 * operand2).toFixed(4)).toString() 
                                 : 
                                 (operand1 * operand2).toString();
             break;
           case "-":
             resultOperation = ((operand1 - operand2).getPrecision() > 4) ? 
-                                (operand1 - operand2).toFixed(4).toString() 
+                                ((operand1 - operand2).toFixed(4)).toString() 
                                 : 
                                 (operand1 - operand2).toString();
             break;
           case "+":
             resultOperation = ((operand1 + operand2).getPrecision() > 4) ? 
-                                (operand1 + operand2).toFixed(4).toString() 
+                                ((operand1 + operand2).toFixed(4)).toString() 
                                 : 
                                 (operand1 + operand2).toString();
             break;
         }
 
-        newResultExpression = this.state.resultExpression + " = " + resultOperation;
+        newResultExpression = this.props.resultExpression + " = " + resultOperation;
         newCurrentInput = resultOperation;
 
       } else {
@@ -228,14 +203,13 @@ class Calculator extends Component {
       }
 
       if (newResultExpression != "") {
-        this.setState({
-          resultExpression: newResultExpression,
-          currentIntput: (Number(newCurrentInput).getPrecision() > 4) ? Number(newCurrentInput).toFixed(4).toString() : newCurrentInput
-        });
+
+        this.props.changeScreenValues(newResultExpression, (Number(newCurrentInput).getPrecision() > 4) ? Number(newCurrentInput).toFixed(4).toString() : newCurrentInput);
+
       } else {
-        this.setState({
-          currentIntput: "division by zero"
-        });
+
+        this.props.changeScreenValues(this.props.resultExpression, "division by zero");
+
       }
 
     }
@@ -243,32 +217,27 @@ class Calculator extends Component {
 
   enterArithmeticOperator(operator) {
 
-    if (/\-/.test(operator) && (/zero/.test(this.state.currentIntput) || this.state.resultExpression == "")) {
-      this.setState({
-        resultExpression: "-0", 
-        currentIntput: "-0"
-      });
-    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.state.resultExpression) && /\-/.test(operator)) {
-      this.setState({
-        resultExpression: this.state.resultExpression + "-", 
-        currentIntput: "-"
-      });
-    } else if (/=/.test(this.state.resultExpression)) {
-      this.setState({
-        resultExpression: this.state.currentIntput + " " + operator.toLowerCase() + " ", 
-        currentIntput: operator
-      });
-    } else if (/^\-?\d+(\.?\d+)?$/.test(this.state.resultExpression)) {
-      this.setState({
-        resultExpression: this.state.resultExpression + " " + operator.toLowerCase() + " ", 
-        currentIntput: operator
-      });
-    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?$/.test(this.state.resultExpression)) {
-      this.setState({
-        resultExpression: this.state.resultExpression.replace(/. \-?$/, operator.toLowerCase() + " "), 
-        currentIntput: operator
-      });
-    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.state.resultExpression)) {
+    if (/\-/.test(operator) && (/zero/.test(this.props.currentIntput) || this.props.resultExpression == "")) {
+
+      this.props.changeScreenValues("-0", "-0");
+
+    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] $/.test(this.props.resultExpression) && /\-/.test(operator)) {
+
+      this.props.changeScreenValues(this.props.resultExpression + "-", "-");
+
+    } else if (/=/.test(this.props.resultExpression)) {
+
+      this.props.changeScreenValues(this.props.currentInput + " " + operator.toLowerCase() + " ", operator);
+
+    } else if (/^\-?\d+(\.?\d+)?$/.test(this.props.resultExpression)) {
+
+      this.props.changeScreenValues(this.props.resultExpression + " " + operator.toLowerCase() + " ", operator);
+
+    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?$/.test(this.props.resultExpression)) {
+
+      this.props.changeScreenValues(this.props.resultExpression.replace(/. \-?$/, operator.toLowerCase() + " "), operator);
+
+    } else if (/^\-?\d+(\.?\d+)? [\/x\-\+] \-?\d+(\.?\d+)?$/.test(this.props.resultExpression)) {
       this.makeOperation(operator);
     }
   }
@@ -278,12 +247,12 @@ class Calculator extends Component {
       <div id="calculator-container" className="container-fluid pt-3 pb-4">
         <p id="marca" className="text-center mb-2 text-secondary fs-4">FreeCodeCamp</p>
         <CalculatorScreen
-          turnOn={this.state.on}
-          result={this.state.resultExpression}
-          input={this.state.currentIntput}
+          turnOn={this.props.on}
+          result={this.props.resultExpression}
+          input={this.props.currentInput}
         />
         <CalculatorPad
-          turnOn={this.state.on}
+          turnOn={this.props.on}
           action={this.handlePressedKey}
         />
       </div>
@@ -291,4 +260,4 @@ class Calculator extends Component {
   }
 }
 
-export default Calculator;
+export default connect(mapStateToProps, mapDispatchToProps) (Calculator);
